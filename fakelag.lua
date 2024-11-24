@@ -1,3 +1,8 @@
+-- Adjustable lag parameters
+local lagDelay = 0 -- Delay between movement updates (in seconds)
+local lagStutter = 0 -- Random stutter amount (0 to 1 or higher)
+
+
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local humanoid = character:WaitForChild("Humanoid")
