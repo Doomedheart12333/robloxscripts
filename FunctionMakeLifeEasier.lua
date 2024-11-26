@@ -200,6 +200,17 @@ local function playAnimation(animationId)
 
     track:Play()
 end
+local function stopAllAnimations(humanoid)
+    if humanoid then
+        local animator = humanoid:FindFirstChild("Animator")
+        if animator then
+            for _, track in pairs(animator:GetPlayingAnimationTracks()) do
+                track:Stop()
+            end
+        end
+    end
+end
+
 function OnKeyPressed(keyCode, userFunction)
     -- Detect key press to trigger the function
     UserInputService.InputBegan:Connect(function(input, gameProcessed)
