@@ -66,6 +66,18 @@ local function teleportPlayer(targetPosition)
         print("Invalid CFrame - teleport failed")
     end
 end
+local function offsetPlayerCFrame(offset)
+    -- Get the player's character
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    
+    -- Ensure the character has a humanoid root part
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+    
+    -- Apply the offset to the player's CFrame
+    humanoidRootPart.CFrame = humanoidRootPart.CFrame * CFrame.new(offset)
+end
+
 --TURNING
 function CardinalDirections(direction)
     local player = game.Players.LocalPlayer
@@ -117,3 +129,8 @@ local function TurnDegrees(turnammount)
     -- Update the player's orientation
     humanoidRootPart.CFrame = CFrame.lookAt(humanoidRootPart.Position, humanoidRootPart.Position + newLookVector)
 end
+--DIE
+local function Reset()
+     humanoid.Health = 0  -- Set health to 0 to "reset" the character
+end
+
