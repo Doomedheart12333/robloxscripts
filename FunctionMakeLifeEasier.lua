@@ -1,12 +1,16 @@
-
 --Variables
 local TextChatService = game:GetService("TextChatService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local player = game.Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
+local characterz = game.Players.LocalPlayer.Character or game.Players.LocalPlayer.CharacterAdded:Wait()
 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 local humanoid = character:WaitForChild("Humanoid")
+local Camera = game.Workspace.CurrentCamera
+local rootPart = character:WaitForChild("HumanoidRootPart")
+local animator = humanoid:WaitForChild("Animator")
+local UserInputService = game:GetService("UserInputService")
 
 -- CHATTING
 function chatMessage(str)
@@ -66,7 +70,7 @@ local function teleportPlayer(targetPosition)
         print("Invalid CFrame - teleport failed")
     end
 end
-local function offsetPlayerCFrame(offset)
+local function offSET(offset)
     -- Get the player's character
     local player = game.Players.LocalPlayer
     local character = player.Character or player.CharacterAdded:Wait()
@@ -133,4 +137,56 @@ end
 local function Reset()
      humanoid.Health = 0  -- Set health to 0 to "reset" the character
 end
+--Parts!
+local function deleteObject(objectName)
+    -- Wait for the object to exist in the Workspace
+    local object = game.Workspace:WaitForChild(objectName)
+    
+    -- Delete the object if it exists
+    if object then
+        object:Destroy()
+    else
+        print("Object not found: " .. objectName)
+    end
+end
+--FUN
+local function sitPlayer()
+    -- Get the player's character
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    
+    -- Ensure the character has a humanoid
+    local humanoid = character:WaitForChild("Humanoid")
+    
+    -- Set the Sit property to true to make the player sit
+    humanoid.Sit = true
+end
+local function makePlayerJump()
+    local bodyVelocity = Instance.new("BodyVelocity")
+    bodyVelocity.MaxForce = Vector3.new(100000, 100000, 100000) -- Apply large force to ensure jump
+    bodyVelocity.Velocity = Vector3.new(0, humanoid.JumpPower, 0) -- Apply upward velocity
+    bodyVelocity.Parent = rootPart
 
+    game:GetService("Debris"):AddItem(bodyVelocity, 0.1)
+end
+local function playAnimation(animationId)
+    -- Create a new Animation object
+    local animation = Instance.new("Animation")
+    
+    -- Set the AnimationId to the provided animation ID
+    animation.AnimationId = "rbxassetid://" .. animationId
+
+    local track = animator:LoadAnimation(animation)
+
+    track:Play()
+end
+function OnKeyPressed(keyCode, userFunction)
+    -- Detect key press to trigger the function
+    UserInputService.InputBegan:Connect(function(input, gameProcessed)
+        if gameProcessed then return end  -- Ignore if the game already processed the input (e.g., for UI interactions)
+
+        if input.KeyCode == keyCode then  -- Check if the selected key is pressed
+            userFunction()  -- Execute the provided function when the key is pressed
+        end
+    end)
+end
