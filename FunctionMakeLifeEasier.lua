@@ -1,3 +1,5 @@
+
+--Variables
 local TextChatService = game:GetService("TextChatService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
@@ -63,4 +65,55 @@ local function teleportPlayer(targetPosition)
     else
         print("Invalid CFrame - teleport failed")
     end
+end
+--TURNING
+function CardinalDirections(direction)
+    local player = game.Players.LocalPlayer
+    local humanoidRootPart = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    
+    if humanoidRootPart then
+        local directionVector
+
+        -- Set the direction vector based on the input
+        if direction == "North" then
+            directionVector = Vector3.new(0, 0, -1) -- North is -Z
+        elseif direction == "South" then
+            directionVector = Vector3.new(0, 0, 1) -- South is +Z
+        elseif direction == "East" then
+            directionVector = Vector3.new(1, 0, 0) -- East is +X
+        elseif direction == "West" then
+            directionVector = Vector3.new(-1, 0, 0) -- West is -X
+        else
+            warn("Invalid direction!")
+            return
+        end
+
+        -- Set the player's orientation to face the chosen direction
+        humanoidRootPart.CFrame = CFrame.lookAt(humanoidRootPart.Position, humanoidRootPart.Position + directionVector)
+    else
+        warn("HumanoidRootPart not found!")
+    end
+end
+local function TurnDegrees(turnammount)
+    local player = game.Players.LocalPlayer
+    local character = player.Character or player.CharacterAdded:Wait()
+    local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+    -- Get the player's current facing direction (Orientation)
+    local currentOrientation = humanoidRootPart.CFrame.LookVector
+
+    -- Calculate the current angle (in degrees) from the LookVector
+    local currentAngle = math.atan2(currentOrientation.Z, currentOrientation.X) * (180 / math.pi)
+
+    -- Turn the player by 90 degrees
+    local newAngle = currentAngle + turnammount
+
+    -- Normalize the new angle (make sure it's between 0 and 360 degrees)
+    newAngle = newAngle % 360
+
+    -- Calculate the new LookVector based on the new angle
+    local newLookVector = Vector3.new(math.cos(math.rad(newAngle)), 0, math.sin(math.rad(newAngle)))
+
+    -- Update the player's orientation
+    humanoidRootPart.CFrame = CFrame.lookAt(humanoidRootPart.Position, humanoidRootPart.Position + newLookVector)
 end
