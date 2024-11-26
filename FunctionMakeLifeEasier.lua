@@ -13,9 +13,29 @@ local animator = humanoid:WaitForChild("Animator")
 local UserInputService = game:GetService("UserInputService")
 
 -- CHATTING
+local isNewChatSystem = pcall(function()
+    return TextChatService.TextChannels
+end)
+
+if isNewChatSystem then
+    print("Using the new TextChatService system.")
+else
+    local legacyChatEvent = ReplicatedStorage:FindFirstChild("DefaultChatSystemChatEvents")
+    if legacyChatEvent and legacyChatEvent:FindFirstChild("SayMessageRequest") then
+        print("Using the legacy chat system.")
+    else
+        print("No recognized chat system is in use.")
+    end
+end
+
+
 function chatMessage(str)
     str = tostring(str)
-    if not isLegacyChat then
+    local isNewChatSystem = pcall(function()
+        return TextChatService.TextChannels
+    end)
+
+    if isNewChatSystem then
         TextChatService.TextChannels.RBXGeneral:SendAsync(str)
     else
         ReplicatedStorage.DefaultChatSystemChatEvents.SayMessageRequest:FireServer(str, "All")
