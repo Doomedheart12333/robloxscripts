@@ -1,0 +1,1 @@
+workspace.Barriers:Destroy()
