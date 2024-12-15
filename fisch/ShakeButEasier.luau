@@ -1,3 +1,7 @@
+-- Get the mouse position (screen coordinates)
+local mouse = game.Players.LocalPlayer:GetMouse()
+local clicklocationx, clicklocationy = mouse.X, mouse.Y
+
 local player = game.Players.LocalPlayer
 local playerGui = player.PlayerGui
 
@@ -23,6 +27,10 @@ local function makeButtonBigger()
             local button = shakeui:FindFirstChild("safezone") and shakeui.safezone:FindFirstChild("button")
             if button then
                 button.Size = UDim2.new(10, 0, 10, 0)
+				-- Simulate the mouse click event at the screen position
+                game:GetService("VirtualInputManager"):SendMouseButtonEvent(clicklocationx, clicklocationy, 0, true, game, 1)
+                game:GetService("VirtualInputManager"):SendMouseButtonEvent(clicklocationx, clicklocationy, 0, false, game, 1)
+ 
             end
 
             -- Exit loop if shakeui is destroyed or no longer exists
