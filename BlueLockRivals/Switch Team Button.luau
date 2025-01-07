@@ -12,7 +12,7 @@ button.Parent = inGameUI
 button.Name = "SwitchTeam"
 button.Position = UDim2.new(0.2, 0, 0.96, 0) -- Example position: center of the screen
 button.Text.Text = "SWITCH TEAM"
-
+button.Visible = true
 
 -- Enlarge on hover, shrink when unhovered, and perform actions on click
 if button:IsA("ImageButton") then
